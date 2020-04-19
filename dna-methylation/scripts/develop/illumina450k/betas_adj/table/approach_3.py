@@ -4,7 +4,7 @@ from scripts.develop.routines import *
 
 data = pdm.Data(
     path='',
-    base='GSE87571'
+    base='EPIC'
 )
 
 annotations = pdm.Annotations(

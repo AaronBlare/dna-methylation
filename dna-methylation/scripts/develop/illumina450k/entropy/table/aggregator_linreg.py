@@ -28,33 +28,22 @@ for data_set in data_sets:
             {'gender': 'F', 'is_duplicate': '0', 'age': (35, 100)},
             {'gender': 'M', 'is_duplicate': '0', 'age': (35, 100)}
         ]
-
-        data_params = {
-            'data': 'betas_adj',
-            'observables': ['age'],
-            'cells': ['Bcell', 'CD4T', 'NK', 'CD8T', 'Gran']
-        }
-
-        cells = pdm.Cells(
-            name='cells_horvath_calculator',
-            types='any'
-        )
     else:
         observables_list = [
             {'gender': 'F'},
             {'gender': 'M'}
         ]
 
-        data_params = {
-            'data': 'betas_adj',
-            'observables': ['age'],
-            'cells': ['B', 'CD4T', 'NK', 'CD8T', 'Gran']
-        }
+    data_params = {
+        'data': 'betas_adj',
+        'observables': ['age'],
+        'cells': ['Bcell', 'CD4T', 'NK', 'CD8T', 'Gran']
+    }
 
-        cells = pdm.Cells(
-            name='cells',
-            types='any'
-        )
+    cells = pdm.Cells(
+        name='cells_horvath_calculator',
+        types='any'
+    )
 
     attributes = pdm.Attributes(
         target='age',

@@ -6,8 +6,8 @@ def is_float(value):
         return False
 
 
-def get_genes(data_dict):
-    genes_raw = data_dict['aux']
+def get_genes(data_dict, key='aux'):
+    genes_raw = data_dict[key]
     print(f'number of cpgs: {len(genes_raw)}')
 
     genes_list = []

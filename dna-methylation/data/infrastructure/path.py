@@ -1,5 +1,6 @@
 from enum import Enum
 import socket
+import os
 
 
 class DataPath(Enum):
@@ -21,3 +22,11 @@ def get_data_path():
         raise ValueError("Unsupported host_name: " + host_name)
 
     return path
+
+
+def make_dir(path):
+    try:
+        os.makedirs(path)
+        print("Directory ", path, " Created ")
+    except FileExistsError:
+        print("Directory ", path, " already exists")

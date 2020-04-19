@@ -8,7 +8,7 @@ from paper.routines.infrastructure.load.table import load_table_dict_xlsx
 from paper.routines.infrastructure.load.annotations import load_annotations_dict
 from paper.routines.infrastructure.load.papers import load_papers_dict
 from paper.routines.infrastructure.save.table import save_table_dict_xlsx
-from paper.polygon.condition import check_condition
+from paper.methods.polygon.condition import check_condition
 from paper.routines.plot.venn import get_layout_3, get_layout_4, get_trace_3, get_trace_4
 from paper.routines.infrastructure.save.figure import save_figure
 
@@ -126,7 +126,6 @@ if not os.path.exists(save_path):
 
 venn_labels = []
 for set_key in sets_with_difference:
-
     save_dict = {}
     for metrics_key in ['i'] + annotations_keys + papers_keys:
         save_dict[metrics_key] = []

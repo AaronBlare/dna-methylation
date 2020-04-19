@@ -1,11 +1,17 @@
 import copy
 import itertools
+from paper.routines.infrastructure.save.table import save_table_dict_xlsx
 from paper.routines.infrastructure.load.table import load_table_dict_pkl
 from paper.routines.infrastructure.load.annotations import load_annotations_dict
 from paper.routines.infrastructure.load.papers import load_papers_dict
 from paper.routines.infrastructure.path import get_data_path
+from paper.routines.plot.venn import get_layout_3, get_layout_4, get_trace_3, get_trace_4
+from paper.routines.infrastructure.save.figure import save_figure
+from collections import defaultdict
 from tqdm import tqdm
 import numpy as np
+import os
+
 
 class Dataset:
     def __init__(self, type, name):
@@ -13,7 +19,7 @@ class Dataset:
         self.name = name
 
 
-def get_data_dicts(datasets, method, keys_load, keys_save, hash_fun, check_fun):
+def get_data_dicts(datasets, method, keys_load, keys_save, hash_fun):
 
     data_dicts = {}
     for ds_id, dataset in enumerate(datasets):
@@ -21,28 +27,20 @@ def get_data_dicts(datasets, method, keys_load, keys_save, hash_fun, check_fun):
         curr_load_path = f'{get_data_path()}/{dataset.name}/{dataset.type}/table/{method}/{hash_fun(dataset)}'
         data_dict = load_table_dict_pkl(f'{curr_load_path}/default.pkl')
 
-        data_dicts[dataset.name] = {}
-        for key in keys_save:
-            data_dicts[dataset.name][key] =[]
+        data_dicts[dataset.name] = defaultdict(list)
 
         num_cpgs = len(data_dict[keys_load[dataset.name][0]])
 
         for cpg_id in tqdm(range(0, num_cpgs), desc=f'{dataset.name} processing'):
-
-            local_dict = {}
             for key_id, key in enumerate(keys_save):
-                local_dict[key] = data_dict[keys_load[dataset.name][key_id]][cpg_id]
-
-            if check_fun(local_dict):
-                for key_id, key in enumerate(keys_save):
-                    data_dicts[dataset.name][key].append(local_dict[key])
+                data_dicts[dataset.name][key].append(data_dict[keys_load[dataset.name][key_id]][cpg_id])
 
     return data_dicts
 
 
-def get_sets(datasets, data_dicts, item_key='item'):
+def get_sets(data_dicts, item_key='item'):
 
-    names = [ds.name for ds in datasets]
+    names = [ds for ds in data_dicts]
     datasets_ids = list(range(0, len(names)))
     keys_ordered = copy.deepcopy(names)
     sets = {}
@@ -102,7 +100,7 @@ def get_cpg_dicts(data_dicts,  key='item'):
     return cpg_dicts
 
 
-def get_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
+def get_cpg_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
 
     annotations_keys = ['CHR', 'MAPINFO', 'UCSC_REFGENE_NAME', 'UCSC_REFGENE_GROUP', 'RELATION_TO_UCSC_CPG_ISLAND']
     papers_keys = ['inoshita', 'singmann', 'yousefi']
@@ -138,5 +136,49 @@ def get_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
                     save_dicts[set_key][paper_key].append(1)
                 else:
                     save_dicts[set_key][paper_key].append(0)
+
+    return save_dicts
+
+
+def process_intersections(data_dicts, save_path):
+    cpg_dicts = get_cpg_dicts(data_dicts)
+
+    for dataset, data_dict in data_dicts.items():
+        save_table_dict_xlsx(f'{save_path}/{dataset}', data_dict)
+
+    sets, sets_with_difference = get_sets(data_dicts)
+
+    save_dicts = get_cpg_save_dicts(sets, data_dicts, cpg_dicts)
+    curr_save_path = f'{save_path}/intersection'
+    if not os.path.exists(curr_save_path):
+        os.makedirs(curr_save_path)
+    for key, save_dict in save_dicts.items():
+        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict)
+
+    save_dicts = get_cpg_save_dicts(sets_with_difference, data_dicts, cpg_dicts)
+    curr_save_path = f'{save_path}/intersection_with_difference'
+    if not os.path.exists(curr_save_path):
+        os.makedirs(curr_save_path)
+    venn_labels = []
+    for key, save_dict in save_dicts.items():
+        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict)
+        curr_labels = key.split('_') + [str(len(sets_with_difference[key]))]
+        venn_labels.append('<br>'.join(curr_labels))
+
+    if len(data_dicts) == 4:
+        layout = get_layout_4()
+        trace = get_trace_4(venn_labels)
+    elif len(data_dicts) == 3:
+        layout = get_layout_3()
+        trace = get_trace_3(venn_labels)
+    else:
+        raise ValueError(f'Venn diagram is not supported')
+
+    fig = {
+        'data': [trace],
+        'layout': layout,
+    }
+
+    save_figure(f'{save_path}/venn', fig)
 
     return save_dicts

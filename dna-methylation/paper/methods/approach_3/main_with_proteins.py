@@ -5,7 +5,7 @@ from tqdm import tqdm
 import os
 from paper.routines.infrastructure.path import get_data_path
 from paper.routines.infrastructure.load.table import load_table_dict_xlsx, load_table_dict_pkl
-from paper.approach_4.functions.minus_log_pvals_figure import minus_log_pvals_figure
+from paper.methods.approach_4.functions.minus_log_pvals_figure import minus_log_pvals_figure
 from paper.routines.infrastructure.save.table import save_table_dict_xlsx
 from paper.routines.plot.venn import get_layout_3, get_layout_4, get_trace_3, get_trace_4
 from paper.routines.infrastructure.save.figure import save_figure
