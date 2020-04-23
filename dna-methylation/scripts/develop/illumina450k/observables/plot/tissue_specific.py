@@ -1,7 +1,9 @@
+import os
 import pydnameth as pdm
 from tqdm import tqdm
+from data.infrastructure.path import get_data_path
 
-path = 'E:/YandexDisk/Work/pydnameth/script_datasets/GPL13534/filtered'
+path = f'{get_data_path()}/GPL13534/filtered'
 
 ds_filter = {}
 ds_target = {}
@@ -16,61 +18,78 @@ for line in tqdm(lines, desc='datasets parsing'):
 
     ds_filter[ds] = {}
     if elems[1] != 'all':
-        filters = elems[1].split(', ')
+        filters = elems[1].split('+ ')
         for filter in filters:
             filter_list = filter.split(': ')
             filter_key = filter_list[0]
-            if '(' in filter_list[1] and ')' in filter_list[1]:
-                filter_values_str = filter_list[1][1::-1]
+            if filter_list[1][0] == '(' and filter_list[1][-1] == ')':
+                filter_values_str = filter_list[1][1:-1]
                 filter_value = filter_values_str.split(',')
             else:
                 filter_value = filter_list[1]
             ds_filter[ds][filter_key] = filter_value
 
-ololo = 1
+    ds_target[ds] = elems[2]
+
+    ds_observables[ds] = []
+    observables_list = elems[3].split(': ')
+    observables_key = observables_list[0]
+    if observables_list[1][0] == '(' and observables_list[1][-1] == ')':
+        observables_values_str = observables_list[1][1:-1]
+        observables_value = observables_values_str.split(',')
+    else:
+        print(f'Dataset {ds} observables format mismatch')
+    for item in observables_value:
+        curr_dict = {observables_key: item}
+        curr_dict.update(ds_filter[ds])
+        ds_observables[ds].append(curr_dict)
 
 f.close()
 
+tissues_folders = os.listdir(path)
+ds_tissues = {}
+for folder in tissues_folders:
+    if os.path.isdir(f'{path}/{folder}'):
+        curr_ds_list = os.listdir(f'{path}/{folder}')
+        for ds in curr_ds_list:
+            ds_tissues[ds] = folder
 
+for ds in ds_tissues:
+    print(ds)
+    data = pdm.Data(
+        path=f'{path}/{ds_tissues[ds]}',
+        base=ds
+    )
 
+    annotations = None
 
-data = pdm.Data(
-    path='E:/YandexDisk/Work/pydnameth/script_datasets/GPL13534/filtered/airway_epithelial_cells',
-    base='GSE85566'
-)
+    cells = None
 
-annotations = None
+    observables = pdm.Observables(
+        name='observables',
+        types={}
+    )
 
-cells = None
+    attributes = pdm.Attributes(
+        target=ds_target[data.base],
+        observables=observables,
+        cells=cells
+    )
 
-observables = pdm.Observables(
-    name='observables',
-    types={}
-)
+    observables_list = ds_observables[data.base]
 
-attributes = pdm.Attributes(
-    target='age',
-    observables=observables,
-    cells=cells
-)
+    data_params = None
 
-observables_list = [
-    {'gender': 'Female', 'disease status': 'Control'},
-    {'gender': 'Male', 'disease status': 'Control'}
-]
-
-data_params = None
-
-pdm.observables_plot_histogram(
-    data=data,
-    annotations=annotations,
-    attributes=attributes,
-    observables_list=observables_list,
-    method_params={
-        'bin_size': 1.0,
-        'opacity': 0.80,
-        'barmode': 'overlay',
-        'x_range': [0, 110],
-        'legend_size': 1
-    }
-)
+    pdm.observables_plot_histogram(
+        data=data,
+        annotations=annotations,
+        attributes=attributes,
+        observables_list=observables_list,
+        method_params={
+            'bin_size': 1.0,
+            'opacity': 0.80,
+            'barmode': 'overlay',
+            'x_range': [0, 110],
+            'legend_size': 1
+        }
+    )
