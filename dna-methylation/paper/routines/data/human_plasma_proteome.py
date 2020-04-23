@@ -6,7 +6,7 @@ import collections
 from paper.routines.infrastructure.save.table import save_table_dict_xlsx
 from paper.routines.routines import get_genes
 from paper.routines.data.data_dicts import get_sets
-from paper.routines.plot.venn import get_layout_3, get_layout_4, get_trace_3, get_trace_4
+from paper.routines.plot.venn import get_layout_2, get_layout_3, get_layout_4, get_trace_2, get_trace_3, get_trace_4
 from paper.routines.infrastructure.save.figure import save_figure
 import os
 
@@ -148,6 +148,9 @@ def process_human_plasma_proteome(target_dict, proteomic_genes, save_path):
     elif len(genes) == 3:
         layout = get_layout_3()
         trace = get_trace_3(venn_labels)
+    elif len(genes) == 2:
+        layout = get_layout_2()
+        trace = get_trace_2(venn_labels)
     else:
         raise ValueError(f'Venn diagram is not supported')
 
@@ -157,3 +160,22 @@ def process_human_plasma_proteome(target_dict, proteomic_genes, save_path):
     }
 
     save_figure(f'{save_path}/venn', fig)
+
+    intsc_key = '_'.join(sorted(list(genes.keys())))
+    intsc_genes = sets_with_difference[intsc_key]
+
+    fn_exp = 'E:/YandexDisk/Work/pydnameth/human_plasma_proteome/GTEX_median_tissue_Lehallier_895_order_liver_log.xlsx'
+    exp_dict = load_table_dict_xlsx(fn_exp)
+
+    gene_id_dict = dict(zip(exp_dict['Description'], list(range(0, len(exp_dict['Description'])))))
+
+    result_dict = {key:[] for key in exp_dict}
+    for gene in intsc_genes:
+        if gene in gene_id_dict:
+            row_id = gene_id_dict[gene]
+            for key in result_dict:
+                result_dict[key].append(exp_dict[key][row_id])
+        else:
+            print(gene)
+
+    save_table_dict_xlsx(f'{curr_save_path}/{intsc_key}_expression', result_dict)

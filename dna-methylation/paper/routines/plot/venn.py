@@ -1,6 +1,19 @@
 import plotly.graph_objs as go
 import colorlover as cl
 
+def get_trace_2(labels):
+    trace = go.Scatter(
+        x=[0.50, 2.50, 1.5],
+        y=[1, 1, 1],
+        text=labels,
+        mode='text',
+        textfont=dict(
+            color='black',
+            size=20,
+            family='Arail',
+        )
+    )
+    return trace
 
 def get_trace_3(labels):
     trace = go.Scatter(
@@ -30,6 +43,63 @@ def get_trace_4(labels):
     )
     return trace
 
+
+def get_layout_2():
+    colors = cl.scales['8']['qual']['Dark2'][0:4]
+    layout = {
+        'xaxis': {
+            'showticklabels': False,
+            'showgrid': False,
+            'zeroline': False,
+            'range': [0, 3]
+        },
+        'yaxis': {
+            'showticklabels': False,
+            'showgrid': False,
+            'zeroline': False,
+            'range': [0, 2]
+        },
+        'shapes': [
+            {
+                'opacity': 0.5,
+                'xref': 'x',
+                'yref': 'y',
+                'fillcolor': colors[3],
+                'x0': 0,
+                'y0': 0,
+                'x1': 2,
+                'y1': 2,
+                'type': 'circle',
+                'line': {
+                    'color': 'black'
+                },
+            },
+            {
+                'opacity': 0.5,
+                'xref': 'x',
+                'yref': 'y',
+                'fillcolor': colors[2],
+                'x0': 1,
+                'y0': 0,
+                'x1': 3,
+                'y1': 2,
+                'type': 'circle',
+                'line': {
+                    'color': 'black',
+                },
+            },
+        ],
+        'margin': {
+            'l': 10,
+            'r': 10,
+            'b': 10,
+            't': 10,
+        },
+        'height': 600,
+        'width': 900,
+        'plot_bgcolor': 'rgba(233,233,233,0)'
+    }
+    return layout
 
 def get_layout_3():
     colors = cl.scales['8']['qual']['Dark2'][0:4]
@@ -98,6 +168,7 @@ def get_layout_3():
         },
         'height': 800,
         'width': 800,
+        'plot_bgcolor': 'rgba(233,233,233,0)'
     }
     return layout
 
@@ -182,6 +253,7 @@ def get_layout_4():
         },
         'height': 1000,
         'width': 1000,
+        'plot_bgcolor': 'rgba(233,233,233,0)'
     }
 
     return layout

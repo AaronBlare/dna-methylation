@@ -4,14 +4,14 @@ from paper.methods.approach_3.filter import filter_data_dicts
 from paper.routines.data.human_plasma_proteome import *
 
 
-pval_perc = 2.5
+pval_perc = 5
 pval_lim = 0.05
-pval_prefix = 'p_value'
+pval_prefix = 'p_value_fdr_bh'
 
-main_key = 'EPIC_GSE40279_GSE55763_GSE87571'
+main_key = 'GSE40279_GSE87571'
 
 type = 'residuals'
-names = ['GSE40279', 'GSE87571', 'EPIC', 'GSE55763']
+names = ['GSE40279', 'GSE87571']
 datasets = [Dataset(type, name) for name in names]
 
 keys_save = [
@@ -68,6 +68,12 @@ if not os.path.exists(f'{save_path}/proteome/ss'):
 ss_target_dict = {'Methylation': ss_result_dicts[main_key]}
 process_human_plasma_proteome(ss_target_dict, ss_genes_lehallier, f'{save_path}/proteome/ss')
 
+if not os.path.exists(f'{save_path}/proteome/ar'):
+    os.makedirs(f'{save_path}/proteome/ar')
+ar_target_dict = {'Methylation': ar_result_dicts[main_key]}
+process_human_plasma_proteome(ar_target_dict, ar_genes_lehallier, f'{save_path}/proteome/ar')
 
-
-olo = 1
+if not os.path.exists(f'{save_path}/proteome/ssar'):
+    os.makedirs(f'{save_path}/proteome/ssar')
+ssar_target_dict = {'Methylation': ssar_result_dicts[main_key]}
+process_human_plasma_proteome(ssar_target_dict, ssar_genes_lehallier, f'{save_path}/proteome/ssar')

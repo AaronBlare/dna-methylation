@@ -123,7 +123,7 @@ def filter_data_dicts(data_dicts, p_value_prefix, pval_perc, save_path):
         )
         ar_plot_data.append(scatter)
 
-    layout = get_layout('$-log_{10}(pvalue)$', '$PDF$')
+    layout = get_layout('$-log_{10}(pvalue)$', 'Probability density function')
 
     fn = f'{save_path}/ss'
     figure = go.Figure(data=ss_plot_data, layout=layout)

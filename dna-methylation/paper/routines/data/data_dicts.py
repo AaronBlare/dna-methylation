@@ -5,7 +5,7 @@ from paper.routines.infrastructure.load.table import load_table_dict_pkl
 from paper.routines.infrastructure.load.annotations import load_annotations_dict
 from paper.routines.infrastructure.load.papers import load_papers_dict
 from paper.routines.infrastructure.path import get_data_path
-from paper.routines.plot.venn import get_layout_3, get_layout_4, get_trace_3, get_trace_4
+from paper.routines.plot.venn import get_layout_2, get_layout_3, get_layout_4, get_trace_2, get_trace_3, get_trace_4
 from paper.routines.infrastructure.save.figure import save_figure
 from collections import defaultdict
 from tqdm import tqdm
@@ -171,6 +171,9 @@ def process_intersections(data_dicts, save_path):
     elif len(data_dicts) == 3:
         layout = get_layout_3()
         trace = get_trace_3(venn_labels)
+    elif len(data_dicts) == 2:
+        layout = get_layout_2()
+        trace = get_trace_2(venn_labels)
     else:
         raise ValueError(f'Venn diagram is not supported')
 
