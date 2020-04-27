@@ -16,7 +16,11 @@ for line in tqdm(lines, desc='datasets parsing'):
     elems = line.split('| ')
     ds = elems[0]
 
-    ds_filter[ds] = {}
+    if ds in ds_filter:
+        ds_filter[ds].append({})
+    else:
+        ds_filter[ds] = [{}]
+    curr_index = len(ds_filter[ds]) - 1
     if elems[1] != 'all':
         filters = elems[1].split('+ ')
         for filter in filters:
@@ -27,11 +31,15 @@ for line in tqdm(lines, desc='datasets parsing'):
                 filter_value = filter_values_str.split(',')
             else:
                 filter_value = filter_list[1]
-            ds_filter[ds][filter_key] = filter_value
+            ds_filter[ds][curr_index][filter_key] = filter_value
 
     ds_target[ds] = elems[2]
 
-    ds_observables[ds] = []
+    if ds in ds_observables:
+        ds_observables[ds].append([])
+    else:
+        ds_observables[ds] = [[]]
+
     observables_list = elems[3].split(': ')
     observables_key = observables_list[0]
     if observables_list[1][0] == '(' and observables_list[1][-1] == ')':
@@ -41,8 +49,8 @@ for line in tqdm(lines, desc='datasets parsing'):
         print(f'Dataset {ds} observables format mismatch')
     for item in observables_value:
         curr_dict = {observables_key: item}
-        curr_dict.update(ds_filter[ds])
-        ds_observables[ds].append(curr_dict)
+        curr_dict.update(ds_filter[ds][curr_index])
+        ds_observables[ds][curr_index].append(curr_dict)
 
 f.close()
 
@@ -61,35 +69,36 @@ for ds in ds_tissues:
         base=ds
     )
 
-    annotations = None
+    for i in range(0, len(ds_observables[ds])):
+        annotations = None
 
-    cells = None
+        cells = None
 
-    observables = pdm.Observables(
-        name='observables',
-        types={}
-    )
+        observables = pdm.Observables(
+            name='observables',
+            types={}
+        )
 
-    attributes = pdm.Attributes(
-        target=ds_target[data.base],
-        observables=observables,
-        cells=cells
-    )
+        attributes = pdm.Attributes(
+            target=ds_target[data.base],
+            observables=observables,
+            cells=cells
+        )
 
-    observables_list = ds_observables[data.base]
+        observables_list = ds_observables[data.base][i]
 
-    data_params = None
+        data_params = None
 
-    pdm.observables_plot_histogram(
-        data=data,
-        annotations=annotations,
-        attributes=attributes,
-        observables_list=observables_list,
-        method_params={
-            'bin_size': 1.0,
-            'opacity': 0.80,
-            'barmode': 'overlay',
-            'x_range': [0, 110],
-            'legend_size': 1
-        }
-    )
+        pdm.observables_plot_histogram(
+            data=data,
+            annotations=annotations,
+            attributes=attributes,
+            observables_list=observables_list,
+            method_params={
+                'bin_size': 1.0,
+                'opacity': 0.80,
+                'barmode': 'overlay',
+                'x_range': [0, 110],
+                'legend_size': 1
+            }
+        )
