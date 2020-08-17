@@ -15,17 +15,38 @@ def get_approach_1_hash(dataset):
 def get_approach_3_hash(dataset):
     if dataset.type == 'residuals':
         hash = {
-            'GSE40279': 'd7d1e0acca27c1974c16942a917320ac',
-            'GSE87571': 'c859f04f18c43296cb61b3151ab53adc',
-            'EPIC': '7adee9f94aa1dee9e79cc1dbfe940ae6',
-            'GSE55763': '1350b1840f9c4bd1cf72023195a29fde',
-            'liver': '81f11bc49cb451091c552dce079bb478'
+            'GSE40279': 'bf0b9f92e948a257329262816ce3d202',
+            'GSE87571': '7c468ca8212428806c727d3e2a836662',
+            'EPIC': 'a64c0b99b7e097c668e8300e29ad693f',
+            'GSE55763': '01f9edb1330453690b493c5a17624c6c',
+            'liver': 'c86106e13eebe67dca94d658cd652860',
+            'GSE74193': '9e47f0a1c102e177ac5183455d72d1c4'
         }
     else:
         raise ValueError(f'{dataset.type} is not supported')
 
     return hash[dataset.name]
 
+
+def get_approach_4_hash(dataset):
+    if dataset.type == 'betas':
+        hash = {
+            'GSE40279': 'bc82f74dd244bca21ed33d708bd61b85',
+            'GSE87571': 'c098dc79338657b0b9c35f55a8441e80',
+            'EPIC': '753bc3a13dfb1e22841bb140a3236dad',
+            'GSE55763': '635cc3bbde1154509bd4c5a564c7f37d'
+        }
+    elif dataset.type == 'residuals':
+        hash = {
+            'GSE40279': '4d1b7f192ea49142732bb2b1374c8ff7',
+            'GSE87571': 'fde5819ae46149e63fbea22a9d973f30',
+            'EPIC': 'b004131b7d5a5657c26ff68dd22d35da',
+            'GSE55763': 'dab3ec0ec397a78a3436c88a4cad6552'
+        }
+    else:
+        raise ValueError(f'{dataset.type} is not supported')
+
+    return hash[dataset.name]
 
 def get_linreg_female_hash(dataset):
     if dataset.type == 'betas':
@@ -72,11 +93,12 @@ def get_polygon_hash(dataset):
 def get_ss_hash(dataset):
     if dataset.type == 'residuals':
         hash = {
-            'GSE40279': 'd794817d',
-            'GSE87571': 'c4a8606d',
-            'EPIC': 'c2355c6e',
-            'GSE55763': 'f3a53c1a',
-            'liver': 'ded0cd22'
+            'GSE40279': 'f6796cdb',
+            'GSE87571': '960bd640',
+            'EPIC': '1a502535',
+            'GSE55763': 'fb0b2483',
+            'liver': '5c56208b',
+            'GSE74193': '3f115b3c'
         }
     else:
         raise ValueError(f'{dataset.type} is not supported')
@@ -91,7 +113,48 @@ def get_ar_hash(dataset):
             'GSE87571': '6af05523',
             'EPIC': '018fad6b',
             'GSE55763': 'c7e956c1',
-            'liver': 'b1f058b7'
+            'liver': 'b1f058b7',
+            'GSE74193': '342dd046'
+        }
+    else:
+        raise ValueError(f'{dataset.type} is not supported')
+
+    return hash[dataset.name]
+
+def get_hs_f_hash(dataset):
+    if dataset.type == 'betas':
+        hash = {
+            'GSE40279': '2a12fab5',
+            'GSE87571': '25dcc690',
+            'EPIC': '8344b456',
+            'GSE55763': 'a11d5a4c'
+        }
+    elif dataset.type == 'residuals':
+        hash = {
+            'GSE40279': '457bdead',
+            'GSE87571': 'eb866188',
+            'EPIC': '97c90927',
+            'GSE55763': 'c566b57e'
+        }
+    else:
+        raise ValueError(f'{dataset.type} is not supported')
+
+    return hash[dataset.name]
+
+def get_hs_m_hash(dataset):
+    if dataset.type == 'betas':
+        hash = {
+            'GSE40279': '69dc0516',
+            'GSE87571': '00f7ba4d',
+            'EPIC': '23556bb7',
+            'GSE55763': '96e527d6'
+        }
+    elif dataset.type == 'residuals':
+        hash = {
+            'GSE40279': 'c0e359de',
+            'GSE87571': 'df920bdb',
+            'EPIC': '82704c0a',
+            'GSE55763': 'e05b4633'
         }
     else:
         raise ValueError(f'{dataset.type} is not supported')

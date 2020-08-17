@@ -14,7 +14,8 @@ import os
 
 
 class Dataset:
-    def __init__(self, type, name):
+    def __init__(self, path, type, name):
+        self.path = path
         self.type = type
         self.name = name
 
@@ -24,7 +25,7 @@ def get_data_dicts(datasets, method, keys_load, keys_save, hash_fun):
     data_dicts = {}
     for ds_id, dataset in enumerate(datasets):
 
-        curr_load_path = f'{get_data_path()}/{dataset.name}/{dataset.type}/table/{method}/{hash_fun(dataset)}'
+        curr_load_path = f'{dataset.path}/{dataset.name}/{dataset.type}/table/{method}/{hash_fun(dataset)}'
         data_dict = load_table_dict_pkl(f'{curr_load_path}/default.pkl')
 
         data_dicts[dataset.name] = defaultdict(list)
@@ -100,7 +101,7 @@ def get_cpg_dicts(data_dicts,  key='item'):
     return cpg_dicts
 
 
-def get_cpg_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
+def get_cpg_dataset_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
 
     annotations_keys = ['CHR', 'MAPINFO', 'UCSC_REFGENE_NAME', 'UCSC_REFGENE_GROUP', 'RELATION_TO_UCSC_CPG_ISLAND']
     papers_keys = ['inoshita', 'singmann', 'yousefi']
@@ -140,28 +141,28 @@ def get_cpg_save_dicts(sets, data_dicts, cpg_dicts, key='item'):
     return save_dicts
 
 
-def process_intersections(data_dicts, save_path):
-    cpg_dicts = get_cpg_dicts(data_dicts)
+def process_intersections(data_dicts, save_path, item_key='item', is_rewrite=True):
+    cpg_dicts = get_cpg_dicts(data_dicts, item_key)
 
     for dataset, data_dict in data_dicts.items():
-        save_table_dict_xlsx(f'{save_path}/{dataset}', data_dict)
+        save_table_dict_xlsx(f'{save_path}/{dataset}', data_dict, is_rewrite)
 
-    sets, sets_with_difference = get_sets(data_dicts)
+    sets, sets_with_difference = get_sets(data_dicts, item_key)
 
-    save_dicts = get_cpg_save_dicts(sets, data_dicts, cpg_dicts)
+    save_dicts = get_cpg_dataset_save_dicts(sets, data_dicts, cpg_dicts, item_key)
     curr_save_path = f'{save_path}/intersection'
     if not os.path.exists(curr_save_path):
         os.makedirs(curr_save_path)
     for key, save_dict in save_dicts.items():
-        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict)
+        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict, is_rewrite)
 
-    save_dicts = get_cpg_save_dicts(sets_with_difference, data_dicts, cpg_dicts)
+    save_dicts_with_diff = get_cpg_dataset_save_dicts(sets_with_difference, data_dicts, cpg_dicts, item_key)
     curr_save_path = f'{save_path}/intersection_with_difference'
     if not os.path.exists(curr_save_path):
         os.makedirs(curr_save_path)
     venn_labels = []
-    for key, save_dict in save_dicts.items():
-        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict)
+    for key, save_dict in save_dicts_with_diff.items():
+        save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict, is_rewrite)
         curr_labels = key.split('_') + [str(len(sets_with_difference[key]))]
         venn_labels.append('<br>'.join(curr_labels))
 
@@ -184,4 +185,27 @@ def process_intersections(data_dicts, save_path):
 
     save_figure(f'{save_path}/venn', fig)
 
-    return save_dicts
+    return save_dicts, save_dicts_with_diff
+
+
+def add_chars_to_dict(data_dict, item_key='item'):
+
+    annotations_keys = ['CHR', 'MAPINFO', 'UCSC_REFGENE_NAME', 'UCSC_REFGENE_GROUP', 'RELATION_TO_UCSC_CPG_ISLAND']
+    papers_keys = ['inoshita', 'singmann', 'yousefi']
+    annotations_dict = load_annotations_dict()
+    papers_dict = load_papers_dict()
+
+    add_keys = annotations_keys + papers_keys
+    for key in add_keys:
+        data_dict[key] = []
+
+    for item in data_dict[item_key]:
+
+        for paper_key in papers_keys:
+            if item in papers_dict[paper_key]:
+                data_dict[paper_key].append(1)
+            else:
+                data_dict[paper_key].append(0)
+
+        for ann_key in annotations_keys:
+            data_dict[ann_key].append(annotations_dict[ann_key][item])

@@ -9,7 +9,19 @@ import plotly
 import numpy as np
 
 
-def filter_data_dicts(data_dicts, p_value_prefix, pval_perc, save_path):
+def add_best_pvalue(data_dicts, p_value_prefix):
+
+    for dataset in data_dicts:
+
+        lin_lin_pvals = data_dicts[dataset][f'lin_lin_{p_value_prefix}']
+        lin_log_pvals = data_dicts[dataset][f'lin_log_{p_value_prefix}']
+        log_lin_pvals = data_dicts[dataset][f'log_lin_{p_value_prefix}']
+        log_log_pvals = data_dicts[dataset][f'log_log_{p_value_prefix}']
+
+        # data_dicts[dataset][p_value_prefix] = np.minimum(np.minimum(lin_lin_pvals, lin_log_pvals), np.minimum(log_lin_pvals, log_log_pvals))
+        data_dicts[dataset][p_value_prefix] = lin_lin_pvals
+
+def filter_data_dicts(data_dicts, p_value_prefix, pval_perc_ss, pval_perc_ar, pval_lim, save_path):
 
     ss_data_dicts = dict.fromkeys(data_dicts.keys())
     for dd in ss_data_dicts:
@@ -30,8 +42,10 @@ def filter_data_dicts(data_dicts, p_value_prefix, pval_perc, save_path):
 
         pvals_ss = np.array(data_dicts[dataset][f'{p_value_prefix}_ss'])
         pvals_ar = np.array(data_dicts[dataset][f'{p_value_prefix}_ar'])
-        pval_ss_percentile = np.percentile(pvals_ss, pval_perc)
-        pval_ar_percentile = np.percentile(pvals_ar, pval_perc)
+        # pval_ss_percentile = min(np.percentile(pvals_ss, pval_perc_ss), pval_lim)
+        # pval_ar_percentile = min(np.percentile(pvals_ar, pval_perc_ar), pval_lim)
+        pval_ss_percentile = 0.01
+        pval_ar_percentile = 0.01
         print(f'{dataset} ss percentile: {pval_ss_percentile}')
         print(f'{dataset} ar percentile: {pval_ar_percentile}')
         ss_percentiles[dataset] = pval_ss_percentile

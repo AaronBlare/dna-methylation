@@ -3,7 +3,7 @@ from scripts.develop.routines import *
 
 
 data = pdm.Data(
-    path='',
+    path='E:/YandexDisk/Work/pydnameth',
     base='liver'
 )
 
@@ -17,13 +17,14 @@ annotations = pdm.Annotations(
 )
 
 cells = pdm.Cells(
-    name='cells_horvath_calculator',
+    name='',
     types='any'
 )
 
 observables = pdm.Observables(
     name='observables',
     types={}
+    #types={'group': 'Control'}
 )
 
 attributes = pdm.Attributes(
@@ -32,30 +33,37 @@ attributes = pdm.Attributes(
     cells=cells
 )
 
-target_list = ['gender', 'age']
+target_ss = 'gender'
+target_ar = 'age'
 
-data_params_list = []
-
-data_params = get_data_params(data.base)
+data_params_ss = get_data_params(data.base)
 if data.base == 'liver':
-    data_params['observables'] = ['age']
+    data_params_ss['observables'] = ['age']
+elif data.base == 'GSE74193':
+    data_params_ss['observables'] = ['age']
+elif data.base == 'GSE61446':
+    data_params_ss['observables'] = ['age']
 else:
-    data_params['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
-    data_params['observables'] = ['age']
-data_params_list.append(data_params)
+    data_params_ss['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
+    data_params_ss['observables'] = ['age']
 
-data_params = get_data_params(data.base)
+data_params_ar = get_data_params(data.base)
 if data.base == 'liver':
-    data_params['observables'] = ['gender']
+    data_params_ar['observables'] = ['gender']
+elif data.base == 'GSE74193':
+    data_params_ar['observables'] = ['sex']
+elif data.base == 'GSE61446':
+    data_params_ar['observables'] = ['sex']
 else:
-    data_params['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
-    data_params['observables'] = ['gender']
-data_params_list.append(data_params)
+    data_params_ar['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
+    data_params_ar['observables'] = ['gender']
 
 pdm.residuals_table_approach_3(
     data,
     annotations,
     attributes,
-    target_list,
-    data_params_list,
+    target_ss,
+    target_ar,
+    data_params_ss,
+    data_params_ar
 )

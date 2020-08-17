@@ -3,7 +3,7 @@ import pandas as pd
 import os.path
 from scripts.develop.routines import *
 
-max_rows = 8
+max_rows = 10
 
 fn = 'scatter_comparison_rows.xlsx'
 rows_dict = {}
@@ -78,7 +78,7 @@ for run_id in range(0, len(rows_dict['items']), max_rows):
 
     curr_dict = {}
     for key in rows_dict:
-        curr_dict[key] = rows_dict[key][s_id:f_id]
+        curr_dict[key] = rows_dict[key][s_id:f_id][::-1]
 
     pdm.betas_plot_scatter_comparison(
         data_list=data_list,
@@ -90,10 +90,10 @@ for run_id in range(0, len(rows_dict['items']), max_rows):
         cols_dict=cols_dict,
         method_params={
             'line': 'no',
-            'fit': 'none',
-            'semi_window': 8,
-            'box_b': 'Q5',
-            'box_t': 'Q95',
+            'fit': 'yes',
+            'semi_window': 4,
+            'box_b': 'Q1',
+            'box_t': 'Q99',
             'legend_size': 1,
             'add': 'none'
         }

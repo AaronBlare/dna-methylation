@@ -102,7 +102,7 @@ pdf("E-MTAB-7309_boxplots_beta_Quantile_filtered_samples_probes.pdf",width=20,he
 par(mfrow=c(2,1))
 boxplot(beta,outline=F,main="No Normalization")
 boxplot(beta_quantile,outline=F,main="quantile Normalization")
-dev.off()
+dev.off() 
 
 beta_quantile <- data.frame(row.names(beta_quantile),beta_quantile)
 colnames(beta_quantile)[1] <- "ID_REF"

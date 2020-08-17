@@ -48,14 +48,14 @@ for dataset, data_dict in data_dicts.items():
 
 sets, sets_with_difference = get_sets(datasets, data_dicts)
 
-save_dicts = get_cpg_save_dicts(sets, data_dicts, cpg_dicts)
+save_dicts = get_cpg_dataset_save_dicts(sets, data_dicts, cpg_dicts)
 curr_save_path = f'{save_path}/intersection'
 if not os.path.exists(curr_save_path):
     os.makedirs(curr_save_path)
 for key, save_dict in save_dicts.items():
     save_table_dict_xlsx(f'{curr_save_path}/{key}', save_dict)
 
-save_dicts = get_cpg_save_dicts(sets_with_difference, data_dicts, cpg_dicts)
+save_dicts = get_cpg_dataset_save_dicts(sets_with_difference, data_dicts, cpg_dicts)
 curr_save_path = f'{save_path}/intersection_with_difference'
 if not os.path.exists(curr_save_path):
     os.makedirs(curr_save_path)

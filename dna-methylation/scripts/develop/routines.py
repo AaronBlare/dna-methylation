@@ -4,6 +4,16 @@ def get_data_params(data_base):
         data_params = {
             'norm': 'quantile',
         }
+    elif data_base == 'GSE74193':
+        data_params = {
+            'part': 'control',
+            'norm': 'funnorm',
+        }
+    elif data_base == 'GSE61446':
+        data_params = {
+            'part': 'full',
+            'norm': 'funnorm',
+        }
     else:
         data_params = {}
 
@@ -77,6 +87,16 @@ def get_observables_list(data_base):
             {'Sex': 'F'},
             {'Sex': 'M'}
         ]
+    elif data_base == 'GSE74193':
+        observables_list = [
+            {'sex': 'F', 'group': 'Control'},
+            {'sex': 'M', 'group': 'Control'}
+        ]
+    elif data_base == 'GSE61446':
+        observables_list = [
+            {'sex': 'F'},
+            {'sex': 'M'}
+        ]
     else:
         observables_list = [
             {'gender': 'F'},
@@ -113,6 +133,8 @@ def get_target(data_base):
         target = 'Age'
     elif data_base == 'offspring':
         target = 'Age'
+    elif data_base == 'GSE74193':
+        target = 'age'
     else:
         target = 'age'
 

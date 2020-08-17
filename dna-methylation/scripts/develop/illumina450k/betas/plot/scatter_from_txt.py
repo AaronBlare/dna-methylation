@@ -3,12 +3,13 @@ from scripts.develop.routines import *
 
 f = open('cpgs.txt', 'r')
 items = f.read().splitlines()
+reverses = ['no'] * len(items)
 x_ranges = ['auto'] * len(items)
 y_ranges = ['auto'] * len(items)
 
 data = pdm.Data(
-    path='',
-    base='GSE87571'
+    path='E:/YandexDisk/Work/pydnameth/tissues/brain(DLPFC)',
+    base='GSE74193'
 )
 
 annotations = pdm.Annotations(
@@ -26,7 +27,7 @@ observables = pdm.Observables(
 )
 
 cells = pdm.Cells(
-    name='cells_horvath_calculator',
+    name='',
     types='any'
 )
 
@@ -48,14 +49,15 @@ pdm.betas_plot_scatter(
     data_params=data_params,
     method_params={
         'items': items,
+        'reverses': reverses,
         'x_ranges': x_ranges,
         'y_ranges': y_ranges,
-        'line': 'yes',
+        'line': 'no',
         'fit': 'yes',
-        'semi_window': 8,
-        'box_b': 'Q5',
-        'box_t': 'Q95',
-        'legend_size': 2,
+        'semi_window': 4,
+        'box_b': 'Q1',
+        'box_t': 'Q99',
+        'legend_size': 1,
         'add': 'none'
     }
 )

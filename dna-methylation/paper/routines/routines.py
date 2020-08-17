@@ -14,7 +14,7 @@ def get_genes(data_dict, key='aux'):
         if isinstance(gene_raw, str):
             if gene_raw != '':
                 curr_genes = gene_raw.split(';')
-                genes_list += curr_genes
+                genes_list += list(set(curr_genes))
 
     print(f'number of cpgs: {len(genes_raw)}')
     print(f'number of genes: {len(list(set(genes_list)))}')
