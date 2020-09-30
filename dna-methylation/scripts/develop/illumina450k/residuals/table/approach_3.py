@@ -3,8 +3,12 @@ from scripts.develop.routines import *
 
 
 data = pdm.Data(
-    path='E:/YandexDisk/Work/pydnameth',
-    base='liver'
+    #path='E:/YandexDisk/Work/pydnameth',
+    #base='liver'
+    # path='',
+    path='E:/YandexDisk/Work/pydnameth/tissues/brain(DLPFC)',
+    # base='GSE87571'
+    base='GSE74193'
 )
 
 annotations = pdm.Annotations(
@@ -17,12 +21,13 @@ annotations = pdm.Annotations(
 )
 
 cells = pdm.Cells(
-    name='',
+    name='cells_horvath_calculator',
     types='any'
 )
 
 observables = pdm.Observables(
-    name='observables',
+    #name='observables',
+    name='observables_part(control)',
     types={}
     #types={'group': 'Control'}
 )
@@ -33,13 +38,14 @@ attributes = pdm.Attributes(
     cells=cells
 )
 
-target_ss = 'gender'
+target_ss = 'sex'
 target_ar = 'age'
 
 data_params_ss = get_data_params(data.base)
 if data.base == 'liver':
     data_params_ss['observables'] = ['age']
 elif data.base == 'GSE74193':
+    data_params_ss['cells'] = ['propNeuron']
     data_params_ss['observables'] = ['age']
 elif data.base == 'GSE61446':
     data_params_ss['observables'] = ['age']
@@ -51,6 +57,7 @@ data_params_ar = get_data_params(data.base)
 if data.base == 'liver':
     data_params_ar['observables'] = ['gender']
 elif data.base == 'GSE74193':
+    data_params_ar['cells'] = ['propNeuron']
     data_params_ar['observables'] = ['sex']
 elif data.base == 'GSE61446':
     data_params_ar['observables'] = ['sex']

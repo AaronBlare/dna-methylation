@@ -2,8 +2,8 @@ import pydnameth as pdm
 from scripts.develop.routines import *
 
 data = pdm.Data(
-    path='',
-    base='E-MTAB-7309-FILTERED'
+    path='E:/YandexDisk/Work/pydnameth/tissues/brain(DLPFC)',
+    base='GSE74193'
 )
 
 data_params = get_data_params(data.base)

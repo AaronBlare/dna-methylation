@@ -1,7 +1,7 @@
 import pandas as pd
 
-geo_file_path = 'E:/YandexDisk/pydnameth/script_datasets/GPL13534/'
-geo_file_name = 'GPL13534_gsm_table_03_03_20.xlsx'
+geo_file_path = 'E:/YandexDisk/pydnameth/script_datasets/GPL21145/'
+geo_file_name = 'GPL21145_gsm_table_22_09_20.xlsx'
 
 file = geo_file_path + geo_file_name
 table_header = pd.read_excel(file, header=None).iat[0, 0]

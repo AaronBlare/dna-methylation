@@ -192,7 +192,7 @@ def gtex_processing(exp_dict, genes, main_key, save_path):
 
     save_table_dict_xlsx(f'{save_path}/{main_key}_expression', result_dict)
 
-    target_keys = ['Whole Blood', 'Liver']
+    target_keys = ['Whole Blood', 'Liver', 'Brain - Frontal Cortex (BA9)']
     plot_data = []
     for t_id, tissue in enumerate(target_keys):
         if len(result_dict[tissue]) > 0:
@@ -222,7 +222,7 @@ def gtex_processing(exp_dict, genes, main_key, save_path):
     traces = []
     base_order = []
 
-    color_scales = [px.colors.sequential.Reds[0:-2], px.colors.sequential.Blues[0:-2]]
+    color_scales = [px.colors.sequential.Reds[2:-2], px.colors.sequential.Blues[2:-2], px.colors.sequential.Greens[2:-2]]
     for t_id, tissue in enumerate(target_keys):
         if len(result_dict[tissue]) > 0:
             target_genes = result_dict['Description']
@@ -327,7 +327,7 @@ def gtex_processing(exp_dict, genes, main_key, save_path):
 
     fn = f'{save_path}/{main_key}_combo'
     fig = go.Figure(data=traces, layout=layout)
-    fig.update_layout(barmode='stack')
+    fig.update_layout(barmode='group')
     plotly.offline.plot(fig, filename=fn + '.html', auto_open=False, show_link=True)
     pio.write_image(fig, fn + '.png')
     pio.write_image(fig, fn + '.pdf')

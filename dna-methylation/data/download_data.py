@@ -28,15 +28,15 @@ def only_words(words):
     return passed_words
 
 
-GPL = '13534'
-suffix = '03_03_20'
+GPL = '21145'
+suffix = '22_09_20'
 
 gsm_key = 'gsm'
 gse_key = 'series_id'
 source_key = 'source_name_ch1'
 characteristics_key = 'characteristics_ch1'
 
-target_dir = f'{get_data_path()}/GPL{GPL}/filtered/brain(DLPFC)'
+target_dir = f'{get_data_path()}/GPL{GPL}/test_single'
 
 fn_xlsx = f'{get_data_path()}/GPL{GPL}/GPL{GPL}_gsm_table_{suffix}.xlsx'
 fn_pkl = f'{get_data_path()}/GPL{GPL}/GPL{GPL}_gsm_table_{suffix}.pkl'
@@ -201,6 +201,9 @@ for gse in tqdm(gses):
     chs = {}
     chs['geo_accession'] = []
     chs['Basename'] = []
+    chs['Array'] = []
+    chs['Slide'] = []
+    chs['Sample_Group'] = []
     for key in chs_keys:
         chs[key] = []
 
@@ -208,7 +211,10 @@ for gse in tqdm(gses):
 
         # characteristics processing
         chs['Basename'].append(base_names[gsm])
-
+        pd_parts = base_names[gsm].split('_')
+        chs['Array'].append(pd_parts[-1])
+        chs['Slide'].append(pd_parts[-2])
+        chs['Sample_Group'].append('C')
         try:
             while True:
                 try:

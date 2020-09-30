@@ -140,18 +140,18 @@ if proteomic == True:
 
         if not os.path.exists(f'{save_path}/proteome/ss/{tmp_ds}'):
             os.makedirs(f'{save_path}/proteome/ss/{tmp_ds}')
-        ss_target_dict = {tmp_ds: ss_result_dicts_with_diff[ds]}
+        ss_target_dict = {tmp_ds: ss_result_dicts[ds]}
         if len(ss_target_dict[tmp_ds]['item']) > 0:
             process_human_plasma_proteome(ss_target_dict, ss_genes_lehallier, f'{save_path}/proteome/ss/{tmp_ds}')
 
         if not os.path.exists(f'{save_path}/proteome/ar/{tmp_ds}'):
             os.makedirs(f'{save_path}/proteome/ar/{tmp_ds}')
-        ar_target_dict = {tmp_ds: ar_result_dicts_with_diff[ds]}
+        ar_target_dict = {tmp_ds: ar_result_dicts[ds]}
         if len(ar_target_dict[tmp_ds]['item']) > 0:
             process_human_plasma_proteome(ar_target_dict, ar_genes_lehallier, f'{save_path}/proteome/ar/{tmp_ds}')
 
         if not os.path.exists(f'{save_path}/proteome/ssar/{tmp_ds}'):
             os.makedirs(f'{save_path}/proteome/ssar/{tmp_ds}')
-        ssar_target_dict = {tmp_ds: ssar_result_dicts_with_diff[ds]}
+        ssar_target_dict = {tmp_ds: ssar_result_dicts[ds]}
         if len(ssar_target_dict[tmp_ds]['item']) > 0:
             process_human_plasma_proteome(ssar_target_dict, ssar_genes_lehallier, f'{save_path}/proteome/ssar/{tmp_ds}')

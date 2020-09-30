@@ -9,7 +9,7 @@ def get_trace_2(labels):
         mode='text',
         textfont=dict(
             color='black',
-            size=20,
+            size=33,
             family='Arail',
         )
     )
@@ -23,7 +23,7 @@ def get_trace_3(labels):
         mode='text',
         textfont=dict(
             color='black',
-            size=20,
+            size=33,
             family='Arail',
         )
     )
@@ -37,7 +37,7 @@ def get_trace_4(labels):
         mode='text',
         textfont=dict(
             color='black',
-            size=15,
+            size=33,
             family='Arail',
         )
     )

@@ -22,8 +22,8 @@ annotations = pdm.Annotations(
 )
 
 observables = pdm.Observables(
-    name='observables',
-    types={}
+    name='observables_part(control)',
+    types={'group': 'Control'}
 )
 
 cells = pdm.Cells(

@@ -22,8 +22,8 @@ def only_words(words):
     return passed_words
 
 
-GPL = '13534'
-suffix = '03_03_20'
+GPL = '21145'
+suffix = '22_09_20'
 
 gsm_key = 'gsm'
 gse_key = 'series_id'
@@ -89,6 +89,9 @@ else:
     save_table_dict_pkl(fn_pkl, gse_gsms_dict)
 
 gses = sorted(gse_gsms_dict.keys(),  key=lambda s: len(gse_gsms_dict.get(s)), reverse=True)
+with open(f'{get_data_path()}/GPL{GPL}/all_gses.txt', 'w') as f:
+    for item in gses:
+        f.write('%s\n' % item)
 
 source_unique_words = set()
 ch_unique_words = set()
@@ -102,7 +105,7 @@ for gse in tqdm(gses):
     path_passed = f'{get_data_path()}/GPL{GPL}/passed/{gse}'
     make_dir(path_all)
 
-    #if os.path.isfile(f'{path_all}/observables.xlsx'):
+    #if os.path.isfile(f'{path_tmp}/observables.xlsx'):
     #    continue
 
     gsms = gse_gsms_dict[gse]
