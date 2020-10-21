@@ -23,17 +23,17 @@ def add_best_pvalue(data_dicts, p_value_prefix):
 
 def filter_data_dicts(data_dicts, p_value_prefix, pval_perc_ss, pval_perc_ar, pval_lim, save_path):
 
-    ss_data_dicts = dict.fromkeys(data_dicts.keys())
+    ss_data_dicts = {x:None for x in data_dicts.keys()}
     for dd in ss_data_dicts:
         ss_data_dicts[dd] = defaultdict(list)
     ar_data_dicts = copy.deepcopy(ss_data_dicts)
     ssar_data_dicts = copy.deepcopy(ss_data_dicts)
 
-    ss_xs = dict.fromkeys(data_dicts.keys())
-    ss_ys = dict.fromkeys(data_dicts.keys())
+    ss_xs = {x:None for x in data_dicts.keys()}
+    ss_ys = {x:None for x in data_dicts.keys()}
 
-    ar_xs = dict.fromkeys(data_dicts.keys())
-    ar_ys = dict.fromkeys(data_dicts.keys())
+    ar_xs = {x:None for x in data_dicts.keys()}
+    ar_ys = {x:None for x in data_dicts.keys()}
 
     ss_percentiles = {}
     ar_percentiles = {}

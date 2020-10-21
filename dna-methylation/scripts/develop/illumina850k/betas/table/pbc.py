@@ -4,13 +4,13 @@ from scripts.develop.routines import *
 
 data = pdm.Data(
     path='',
-    base='GSE55763'
+    base='unn_epic'
 )
 
 annotations = pdm.Annotations(
     name='annotations',
-    type='450k',
-    exclude='bad_cpgs',
+    type='850k',
+    exclude='none',
     select_dict={
         'CHR': ['-X', '-Y']
     }
@@ -22,27 +22,22 @@ observables = pdm.Observables(
 )
 
 cells = pdm.Cells(
-    name='cells_horvath_calculator',
+    name='cell_counts',
     types='any'
 )
 
-target = get_target(data.base)
-observables_list = get_observables_list(data.base)
-data_params = get_data_params(data.base)
-
-data_params['data'] = 'betas_adj'
-data_params['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
-
+target = 'Sample_Group'
 attributes = pdm.Attributes(
     target=target,
     observables=observables,
     cells=cells
 )
 
-pdm.entropy_table_ancova(
+data_params = get_data_params(data.base)
+
+pdm.betas_table_pbc(
     data=data,
     annotations=annotations,
     attributes=attributes,
-    observables_list=observables_list,
-    data_params=data_params
+    data_params=data_params,
 )

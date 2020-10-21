@@ -1,6 +1,8 @@
 import pydnameth as pdm
 import pandas as pd
 import os.path
+from scripts.develop.routines import *
+
 
 fn = 'scatter_comparison_rows.xlsx'
 rows_dict = {}
@@ -51,41 +53,20 @@ for data_base in data_bases:
         types={}
     )
 
-    if data.base == 'GSE55763':
-        obs = [
-            {'gender': 'F', 'is_duplicate': '0', 'age': (35, 100)},
-            {'gender': 'M', 'is_duplicate': '0', 'age': (35, 100)}
-        ]
+    cells = pdm.Cells(
+        name='cells_horvath_calculator',
+        types='any'
+    )
 
-        data_params = {
-            'data': 'betas_adj',
-            'observables': ['age'],
-            'cells': ['Bcell', 'CD4T', 'NK', 'CD8T', 'Gran']
-        }
-
-        cells = pdm.Cells(
-            name='cells_horvath_calculator',
-            types='any'
-        )
-    else:
-        obs = [
-            {'gender': 'F'},
-            {'gender': 'M'}
-        ]
-
-        data_params = {
-            'data': 'betas_adj',
-            'observables': ['age'],
-            'cells': ['B', 'CD4T', 'NK', 'CD8T', 'Gran']
-        }
-
-        cells = pdm.Cells(
-            name='cells',
-            types='any'
-        )
+    target = get_target(data.base)
+    obs = get_observables_list(data.base)
+    data_params = get_data_params(data.base)
+    data_params['data'] = 'betas_adj'
+    data_params['cells'] = ['Bcell', 'CD4T', 'CD8T', 'Gran', 'NK']
 
     observables_list.append(obs)
     data_params_list.append(data_params)
+
 
     attributes = pdm.Attributes(
         target='age',
@@ -105,9 +86,9 @@ pdm.entropy_plot_scatter_comparison(
     method_params={
         'line': 'yes',
         'fit': 'none',
-        'semi_window': 8,
-        'box_b': 'Q5',
-        'box_t': 'Q95',
+        'semi_window': 4,
+        'box_b': 'Q1',
+        'box_t': 'Q99',
         'legend_size': 1,
         'add': 'none'
     }

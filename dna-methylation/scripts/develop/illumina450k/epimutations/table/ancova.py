@@ -1,19 +1,19 @@
 import pydnameth as pdm
+from scripts.develop.routines import *
+
 
 data = pdm.Data(
     path='',
-    base='EPIC'
+    base='GSE40279'
 )
 
 annotations = pdm.Annotations(
     name='annotations',
+    type='450k',
     exclude='bad_cpgs',
-    cross_reactive='any',
-    snp='any',
-    chr='NS',
-    gene_region='any',
-    geo='any',
-    probe_class='any'
+    select_dict={
+        'CHR': ['-X', '-Y']
+    }
 )
 
 observables = pdm.Observables(
@@ -22,30 +22,24 @@ observables = pdm.Observables(
 )
 
 cells = pdm.Cells(
-    name='cells',
+    name='cells_horvath_calculator',
     types='any'
 )
 
+target = get_target(data.base)
+observables_list = get_observables_list(data.base)
+data_params = get_data_params(data.base)
+
 attributes = pdm.Attributes(
-    target='age',
+    target=target,
     observables=observables,
     cells=cells
 )
-
-if data.base == 'GSE55763':
-    observables_list = [
-        {'gender': 'F', 'is_duplicate': '0', 'age': (35, 100)},
-        {'gender': 'M', 'is_duplicate': '0', 'age': (35, 100)}
-    ]
-else:
-    observables_list = [
-        {'gender': 'F'},
-        {'gender': 'M'}
-    ]
 
 pdm.epimutations_table_ancova(
     data=data,
     annotations=annotations,
     attributes=attributes,
-    observables_list=observables_list
+    observables_list=observables_list,
+    data_params=data_params
 )

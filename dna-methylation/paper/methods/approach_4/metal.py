@@ -17,7 +17,7 @@ def metal_preprocess(path, datasets, targets, suffix):
         target = data_dict['item']
         print(f'{dataset} num cpgs: {len(target)}')
 
-    cpgs_dict = dict.fromkeys(cpgs_set)
+    cpgs_dict = {x:None for x in cpgs_set}
 
     print(f'num_common cpgs: {len(cpgs_dict)}')
 

@@ -1,6 +1,9 @@
 import pydnameth as pdm
 import pandas as pd
 import os.path
+from scripts.develop.routines import *
+
+max_rows = 10
 
 fn = 'scatter_comparison_rows.xlsx'
 rows_dict = {}
@@ -38,13 +41,11 @@ for data_base in data_bases:
 
     annotations = pdm.Annotations(
         name='annotations',
+        type='450k',
         exclude='bad_cpgs',
-        cross_reactive='any',
-        snp='any',
-        chr='NS',
-        gene_region='any',
-        geo='any',
-        probe_class='any'
+        select_dict={
+            'CHR': ['-X', '-Y']
+        }
     )
     annotations_list.append(annotations)
 
@@ -56,25 +57,20 @@ for data_base in data_bases:
         name='cells',
         types='any'
     )
+
+    target = get_target(data.base)
+    obs = get_observables_list(data.base)
+    data_params = get_data_params(data.base)
+
     attributes = pdm.Attributes(
-        target='age',
+        target=target,
         observables=observables,
         cells=cells
     )
     attributes_list.append(attributes)
 
-    if data.base == 'GSE55763':
-        obs = [
-            {'gender': 'F', 'is_duplicate': '0', 'age': (35, 100)},
-            {'gender': 'M', 'is_duplicate': '0', 'age': (35, 100)}
-        ]
-    else:
-        obs = [
-            {'gender': 'F'},
-            {'gender': 'M'}
-        ]
     observables_list.append(obs)
-    data_params_list.append([])
+    data_params_list.append(data_params)
 
 pdm.epimutations_plot_scatter_comparison(
     data_list=data_list,
@@ -85,11 +81,11 @@ pdm.epimutations_plot_scatter_comparison(
     rows_dict=rows_dict,
     cols_dict=cols_dict,
     method_params={
-        'line': 'yes',
-        'fit': 'none',
-        'semi_window': 8,
-        'box_b': 'Q5',
-        'box_t': 'Q95',
+        'line': 'no',
+        'fit': 'yes',
+        'semi_window': 4,
+        'box_b': 'Q1',
+        'box_t': 'Q99',
         'legend_size': 1,
         'add': 'none'
     }
